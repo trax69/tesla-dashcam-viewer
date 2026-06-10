@@ -128,6 +128,7 @@ src/
   worker-sei.js        — Web Worker: SEI NAL unit extraction + protobuf decode
   ui/                  — DOM helpers: clip list, camera grid, loading overlay, event info
 assets/
+  icons/               — camera icons (top-down car + view cone), embedded as CSS masks
   wheel.svg            — steering wheel icon source
   screenshot.png       — README screenshot
 vendor/

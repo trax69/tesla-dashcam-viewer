@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <!-- Top-down car, view cone to the left side -->
+  <rect x="8.5" y="5.5" width="7" height="13" rx="3.5" opacity=".45"/>
+  <path d="M9 12 1.4 6.9a12 12 0 0 0 0 10.2L9 12Z"/>
+</svg>

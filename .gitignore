@@ -1,0 +1,41 @@
+# Dashcam footage (large binary files — bring your own)
+*.mp4
+*.MP4
+
+# Tesla Sentry/Dashcam event folders
+[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]_*/
+SavedClips/
+SentryClips/
+RecentClips/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# AI agent tooling (local dev only)
+.claude/
+.agents/
+skills-lock.json
+
+# Node (if ever added)
+node_modules/
+
+# SonarQube (local analysis only — config carries host/token, scanner leaves artifacts)
+sonar-project.properties
+.scannerwork/
+.sonarlint/
+
+# Logs & temp files
+*.log
+*.tmp
+*.bak
+
+# Zipped footage exports
+*.zip

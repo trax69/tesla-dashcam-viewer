@@ -1,0 +1,114 @@
+#app { display: flex; width: 100vw; height: 100vh; }
+
+#sidebar {
+  width: var(--sidebar-width);
+  min-width: var(--sidebar-width);
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; gap: 2px;
+  padding: 14px 12px 8px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.sidebar-label {
+  font-size: .62rem; font-weight: 700; letter-spacing: .14em;
+  color: var(--text-dim);
+  padding: 4px 6px 6px;
+}
+.sidebar-divider { height: 14px; flex-shrink: 0; }
+
+/* "Open" — quiet raised button */
+.sidebar-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 10px 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-size: .82rem; font-weight: 600;
+  cursor: pointer;
+  transition: background .15s, border-color .15s;
+}
+.sidebar-btn:hover { background: var(--surface-3); border-color: var(--border-strong); }
+.sidebar-btn .cam-icon { width: 16px; height: 16px; color: var(--text-muted); }
+
+/* Camera selector — chip grid, "All" spans the row */
+#cam-group {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+  padding: 0 0 2px;
+}
+#btn-cam-quad { grid-column: 1 / -1; }
+
+.cam-btn {
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+  padding: 9px 6px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text-muted);
+  font-size: .75rem; font-weight: 550;
+  cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.cam-btn:hover { background: var(--surface-2); color: var(--text); }
+.cam-btn.active {
+  background: var(--accent-soft);
+  border-color: rgba(62, 106, 225, .45);
+  color: var(--text);
+}
+.cam-btn.active .cam-icon { color: var(--accent); }
+
+.cam-icon { width: 18px; height: 18px; flex-shrink: 0; }
+.quad-icon {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 2px; width: 16px; height: 16px;
+}
+.quad-icon span { background: currentColor; border-radius: 2px; }
+.quad-icon-6 { grid-template-columns: repeat(3, 1fr); }
+
+/* Clip list — thumbnail cards */
+#clip-list {
+  flex: 1; overflow-y: auto;
+  display: flex; flex-direction: column; gap: 8px;
+  padding: 2px 0 8px;
+}
+
+.clip-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 6px 8px;
+  padding: 6px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background .15s, border-color .15s;
+}
+.clip-item:hover { background: var(--surface-2); }
+.clip-item.active {
+  background: var(--surface-2);
+  border-color: rgba(62, 106, 225, .5);
+}
+
+.clip-thumb, .clip-thumb-placeholder {
+  grid-column: 1 / -1;
+  width: 100%; height: auto; aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 8px;
+  background: var(--video-bg);
+}
+.clip-thumb-placeholder {
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-dim);
+}
+
+.clip-time {
+  font-size: .78rem; font-weight: 600; color: var(--text);
+  font-variant-numeric: tabular-nums;
+  padding-left: 2px;
+}
+.clip-cams {
+  font-size: .68rem; color: var(--text-dim);
+  align-self: center; justify-self: end;
+  padding-right: 2px;
+}

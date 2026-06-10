@@ -1,0 +1,25 @@
+@media (max-width: 920px) {
+  :root { --sidebar-width: 188px; }
+}
+
+@media (max-width: 720px) {
+  :root { --hud-bar-height: 62px; }
+
+  #app { flex-direction: column; }
+
+  #sidebar {
+    width: 100%; min-width: 100%; height: auto;
+    flex-direction: row; align-items: center; gap: 6px;
+    padding: 8px 10px;
+    border-right: none; border-bottom: 1px solid var(--border);
+    overflow-x: auto; overflow-y: hidden;
+  }
+
+  .sidebar-label, #clip-list { display: none; }
+  .sidebar-divider { width: 8px; height: auto; }
+
+  .sidebar-btn { flex-shrink: 0; padding: 8px 12px; }
+
+  #cam-group { display: flex; gap: 6px; padding: 0; }
+  .cam-btn { white-space: nowrap; padding: 8px 12px; flex-shrink: 0; }
+}

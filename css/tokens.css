@@ -1,0 +1,25 @@
+:root {
+  /* Graphite scale — chrome recedes, video owns the black */
+  --bg:            #0e0f13;
+  --surface:       #15171c;
+  --surface-2:     #1d2026;
+  --surface-3:     #262a31;
+  --video-bg:      #000;
+
+  --text:          #f5f7fa;
+  --text-muted:    #9aa3b0;
+  --text-dim:      #565d68;
+
+  --border:        rgba(255, 255, 255, .07);
+  --border-strong: rgba(255, 255, 255, .14);
+
+  /* Single interactive accent (Tesla blue); red kept for alert semantics */
+  --accent:        #3e6ae1;
+  --accent-soft:   rgba(62, 106, 225, .18);
+  --danger:        #e82127;
+
+  --sidebar-width:    232px;
+  --controls-height:  60px;
+  --event-bar-height: 32px;
+  --hud-bar-height:   76px;
+}

@@ -1,0 +1,10 @@
+# Normalize line endings: store as LF, checkout per-platform default
+* text=auto
+
+# Binary assets
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.ico binary
+*.webp binary
+*.mp4 binary

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tesla Dashcam Viewer</title>
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/drop-zone.css">
+  <link rel="stylesheet" href="css/sidebar.css">
+  <link rel="stylesheet" href="css/video.css">
+  <link rel="stylesheet" href="css/controls.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+<div id="drop-zone">
+  <div class="drop-inner">
+    <div class="drop-icon">
+      <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="8" y="20" width="48" height="36" rx="4" stroke="currentColor" stroke-width="3"/>
+        <path d="M8 28h48" stroke="currentColor" stroke-width="2" stroke-dasharray="4 3"/>
+        <path d="M32 10v20M24 18l8-8 8 8" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <p class="drop-title">Drop dashcam folder here</p>
+    <p class="drop-sub">or</p>
+    <label class="drop-btn">
+      Select folder
+      <input type="file" id="folder-input" webkitdirectory multiple accept=".mp4,.json,.png">
+    </label>
+    <p class="drop-hint">Supports Tesla Sentry Mode &amp; Dashcam event folders</p>
+  </div>
+</div>
+
+<div id="app" class="hidden">
+
+  <aside id="sidebar">
+    <button id="btn-load-folder" title="Open new folder" class="sidebar-btn">
+      <svg class="cam-icon" viewBox="0 0 20 18" fill="currentColor">
+        <path d="M1 4a2 2 0 012-2h4l2 2h8a2 2 0 012 2v9a2 2 0 01-2 2H3a2 2 0 01-2-2V4z"/>
+        <path d="M6 10h8M10 7v6" stroke="var(--surface)" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      Open
+    </button>
+    <input type="file" id="folder-input-reload" webkitdirectory multiple accept=".mp4,.json,.png" style="display:none">
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-label">CAMERAS</div>
+    <div id="cam-group">
+    <button class="cam-btn active" data-cam="quad" id="btn-cam-quad">
+      <span class="cam-icon quad-icon">
+        <span></span><span></span><span></span><span></span>
+      </span>
+      All
+    </button>
+    <button class="cam-btn" data-cam="front">
+      <svg class="cam-icon" viewBox="0 0 20 14" fill="currentColor"><rect x="1" y="1" width="14" height="12" rx="1.5"/><path d="M15 5l4-3v10l-4-3V5z"/></svg>
+      Front
+    </button>
+    <button class="cam-btn" data-cam="back">
+      <svg class="cam-icon" viewBox="0 0 20 14" fill="currentColor"><rect x="5" y="1" width="14" height="12" rx="1.5"/><path d="M5 5L1 2v10l4-3V5z"/></svg>
+      Back
+    </button>
+    <button class="cam-btn" data-cam="left_repeater">
+      <svg class="cam-icon" viewBox="0 0 14 20" fill="currentColor"><rect x="1" y="1" width="12" height="14" rx="1.5"/><path d="M5 15l-3 4h10l-3-4H5z"/></svg>
+      Left
+    </button>
+    <button class="cam-btn" data-cam="right_repeater">
+      <svg class="cam-icon" viewBox="0 0 14 20" fill="currentColor"><rect x="1" y="5" width="12" height="14" rx="1.5"/><path d="M5 5l-3-4h10L9 5H5z"/></svg>
+      Right
+    </button>
+    <button class="cam-btn pillar-btn hidden" data-cam="left_pillar">
+      <svg class="cam-icon" viewBox="0 0 12 20" fill="currentColor"><rect x="1" y="1" width="10" height="18" rx="1.5"/><line x1="3" y1="4" x2="3" y2="16" stroke="var(--surface)" stroke-width="1.5"/></svg>
+      L·Pillar
+    </button>
+    <button class="cam-btn pillar-btn hidden" data-cam="right_pillar">
+      <svg class="cam-icon" viewBox="0 0 12 20" fill="currentColor"><rect x="1" y="1" width="10" height="18" rx="1.5"/><line x1="9" y1="4" x2="9" y2="16" stroke="var(--surface)" stroke-width="1.5"/></svg>
+      R·Pillar
+    </button>
+    </div>
+
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-label">CLIPS</div>
+    <div id="clip-list"></div>
+  </aside>
+
+  <div id="main-area">
+    <div id="hud-bar">
+      <canvas id="hud-canvas"></canvas>
+    </div>
+
+    <div id="video-container">
+      <div id="quad-view" class="grid-4"></div>
+      <div id="single-view" class="hidden">
+        <canvas id="single-canvas"></canvas>
+      </div>
+      <div id="loading-overlay" class="hidden">
+        <div class="spinner"></div>
+        <div id="loading-text">Loading cameras…</div>
+      </div>
+    </div>
+
+    <div id="controls">
+      <button id="btn-prev-clip" title="Previous clip" disabled>
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <rect x="6" y="6" width="2" height="12" rx="0.5"/>
+          <path d="M16 6L9 12l7 6V6z"/>
+        </svg>
+      </button>
+      <button id="btn-play" title="Play / Pause">
+        <svg id="icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        <svg id="icon-pause" viewBox="0 0 24 24" fill="currentColor" class="hidden"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+      </button>
+      <button id="btn-next-clip" title="Next clip" disabled>
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <rect x="16" y="6" width="2" height="12" rx="0.5"/>
+          <path d="M8 6l7 6-7 6V6z"/>
+        </svg>
+      </button>
+      <div id="scrubber-wrap">
+        <input type="range" id="scrubber" min="0" max="10000" value="0" step="1">
+      </div>
+      <span id="time-display">0:00 / 0:00</span>
+      <select id="speed-select" title="Playback speed">
+        <option value="0.25">0.25×</option>
+        <option value="0.5">0.5×</option>
+        <option value="1" selected>1×</option>
+        <option value="2">2×</option>
+      </select>
+      <button id="btn-unit" title="Toggle speed units">mph</button>
+    </div>
+
+    <div id="event-info" class="hidden">
+      <span id="info-city"></span>
+      <span id="info-reason"></span>
+      <span id="info-timestamp"></span>
+    </div>
+  </div>
+</div>
+
+<!-- Third-party libraries -->
+<script src="vendor/protobuf.min.js"></script>
+<script src="vendor/dashcam-mp4.js"></script>
+
+<!-- App source — classic scripts only (works from file://); order matters -->
+<script src="src/constants.js"></script>
+<script src="src/state.js"></script>
+<script src="src/proto.js"></script>
+<script src="src/parser.js"></script>
+<script src="src/sei-parser.js"></script>
+<script src="src/ui/dom.js"></script>
+<script src="src/ui/format.js"></script>
+<script src="src/ui/loading.js"></script>
+<script src="src/ui/grid.js"></script>
+<script src="src/ui/clip-list.js"></script>
+<script src="src/ui/event-info.js"></script>
+<script src="src/hud.js"></script>
+<script src="src/player.js"></script>
+<script src="src/app.js"></script>
+</body>
+</html>

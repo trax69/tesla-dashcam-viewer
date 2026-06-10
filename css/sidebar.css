@@ -90,11 +90,14 @@
   padding: 2px 0 8px;
 }
 
+/* Clip cards are <button>s (keyboard operable) — reset UA button styles */
 .clip-item {
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 6px 8px;
   padding: 6px;
+  background: none;
+  text-align: left;
   border: 1px solid transparent;
   border-radius: 12px;
   cursor: pointer;

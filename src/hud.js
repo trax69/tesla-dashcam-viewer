@@ -5,6 +5,9 @@ class TeslaHUD {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
     this._dpr = 1;
+    // Canvas fallback content (index.html) — the accessible text alternative
+    this._statusEl = canvas.querySelector('#hud-status');
+    this._lastStatusUpdate = -1e9;
     this.resize();
   }
 
@@ -28,6 +31,7 @@ class TeslaHUD {
 
   render(sei, timeMs, useKph) {
     this.clear();
+    this._updateStatus(sei, useKph);
 
     const ctx = this.ctx;
     const W = this.canvas.width / this._dpr;
@@ -42,6 +46,26 @@ class TeslaHUD {
     this._drawBlinkers(ctx, W, H, sei.blinker_on_left, sei.blinker_on_right, timeMs);
     this._drawSteeringWheel(ctx, W, H, sei.steering_wheel_angle);
     this._drawAccelPedal(ctx, W, H, sei.accelerator_pedal_position);
+  }
+
+  // Mirrors the drawn telemetry into the canvas fallback text (throttled ~1/s)
+  _updateStatus(sei, useKph) {
+    if (!this._statusEl) return;
+    const now = performance.now();
+    if (now - this._lastStatusUpdate < 1000) return;
+    this._lastStatusUpdate = now;
+
+    let text = 'No telemetry';
+    if (sei) {
+      const GEARS = { 0: 'Park', 1: 'Drive', 2: 'Reverse', 3: 'Neutral' };
+      const AP = { 1: 'Self Driving', 2: 'Autosteer', 3: 'Traffic-Aware Cruise' };
+      const v = sei.vehicle_speed_mps ?? 0;
+      const speed = Math.round(Math.max(0, useKph ? v * 3.6 : v * 2.23694));
+      text = `${speed} ${useKph ? 'km/h' : 'mph'}, gear ${GEARS[sei.gear_state] ?? 'Park'}`;
+      if (sei.brake_applied) text += ', braking';
+      if (AP[sei.autopilot_state]) text += `, ${AP[sei.autopilot_state]}`;
+    }
+    if (this._statusEl.textContent !== text) this._statusEl.textContent = text;
   }
 
   _drawGear(ctx, W, H, gearState) {
@@ -121,7 +145,7 @@ class TeslaHUD {
     ctx.fillText(String(display), W * 0.5, H * 0.4);
 
     ctx.font = `500 ${H * 0.18}px -apple-system, system-ui, sans-serif`;
-    ctx.fillStyle = 'rgba(255,255,255,0.45)';
+    ctx.fillStyle = 'rgba(255,255,255,0.55)'; /* ≥4.5:1 on --surface */
     ctx.textBaseline = 'top';
     ctx.fillText(unit, W * 0.5, H * 0.7);
   }
@@ -132,7 +156,8 @@ class TeslaHUD {
     if (!label) return;
 
     ctx.font = `400 ${H * 0.15}px -apple-system, system-ui, sans-serif`;
-    ctx.fillStyle = apState === 1 ? '#3e6ae1' : 'rgba(255,255,255,0.4)';
+    /* Both ≥4.5:1 on --surface (WCAG 1.4.3) */
+    ctx.fillStyle = apState === 1 ? '#7da1f7' : 'rgba(255,255,255,0.62)';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'bottom';
     ctx.fillText(label, W * 0.5, H * 0.99);

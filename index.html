@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
+<h1 class="sr-only">Tesla Dashcam Viewer</h1>
 
 <div id="drop-zone">
   <div class="drop-inner">
@@ -23,7 +24,7 @@
         <path d="M32 10v20M24 18l8-8 8 8" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     </div>
-    <p class="drop-title">Drop dashcam folder here</p>
+    <h2 class="drop-title">Drop dashcam folder here</h2>
     <p class="drop-sub">or</p>
     <label class="drop-btn">
       Select folder
@@ -37,7 +38,7 @@
 
   <aside id="sidebar">
     <button id="btn-load-folder" title="Open new folder" class="sidebar-btn">
-      <svg class="cam-icon" viewBox="0 0 20 18" fill="currentColor">
+      <svg class="cam-icon" viewBox="0 0 20 18" fill="currentColor" aria-hidden="true">
         <path d="M1 4a2 2 0 012-2h4l2 2h8a2 2 0 012 2v9a2 2 0 01-2 2H3a2 2 0 01-2-2V4z"/>
         <path d="M6 10h8M10 7v6" stroke="var(--surface)" stroke-width="1.5" stroke-linecap="round"/>
       </svg>
@@ -47,34 +48,34 @@
     <div class="sidebar-divider"></div>
     <div class="sidebar-label">CAMERAS</div>
     <div id="cam-group">
-    <button class="cam-btn active" data-cam="quad" id="btn-cam-quad">
-      <span class="cam-icon quad-icon">
+    <button class="cam-btn active" data-cam="quad" id="btn-cam-quad" aria-pressed="true">
+      <span class="cam-icon quad-icon" aria-hidden="true">
         <span></span><span></span><span></span><span></span>
       </span>
       All
     </button>
-    <button class="cam-btn" data-cam="front">
-      <span class="cam-icon cam-svg icon-cam-front"></span>
+    <button class="cam-btn" data-cam="front" aria-pressed="false">
+      <span class="cam-icon cam-svg icon-cam-front" aria-hidden="true"></span>
       Front
     </button>
-    <button class="cam-btn" data-cam="back">
-      <span class="cam-icon cam-svg icon-cam-back"></span>
+    <button class="cam-btn" data-cam="back" aria-pressed="false">
+      <span class="cam-icon cam-svg icon-cam-back" aria-hidden="true"></span>
       Back
     </button>
-    <button class="cam-btn" data-cam="left_repeater">
-      <span class="cam-icon cam-svg icon-cam-left"></span>
+    <button class="cam-btn" data-cam="left_repeater" aria-pressed="false">
+      <span class="cam-icon cam-svg icon-cam-left" aria-hidden="true"></span>
       Left
     </button>
-    <button class="cam-btn" data-cam="right_repeater">
-      <span class="cam-icon cam-svg icon-cam-right"></span>
+    <button class="cam-btn" data-cam="right_repeater" aria-pressed="false">
+      <span class="cam-icon cam-svg icon-cam-right" aria-hidden="true"></span>
       Right
     </button>
-    <button class="cam-btn pillar-btn hidden" data-cam="left_pillar">
-      <span class="cam-icon cam-svg icon-cam-lpillar"></span>
+    <button class="cam-btn pillar-btn hidden" data-cam="left_pillar" aria-pressed="false">
+      <span class="cam-icon cam-svg icon-cam-lpillar" aria-hidden="true"></span>
       L·Pillar
     </button>
-    <button class="cam-btn pillar-btn hidden" data-cam="right_pillar">
-      <span class="cam-icon cam-svg icon-cam-rpillar"></span>
+    <button class="cam-btn pillar-btn hidden" data-cam="right_pillar" aria-pressed="false">
+      <span class="cam-icon cam-svg icon-cam-rpillar" aria-hidden="true"></span>
       R·Pillar
     </button>
     </div>
@@ -84,50 +85,51 @@
     <div id="clip-list"></div>
   </aside>
 
-  <div id="main-area">
+  <main id="main-area">
     <div id="hud-bar">
-      <canvas id="hud-canvas"></canvas>
+      <canvas id="hud-canvas"><p id="hud-status">No telemetry</p></canvas>
     </div>
 
     <div id="video-container">
       <div id="quad-view" class="grid-4"></div>
       <div id="single-view" class="hidden">
-        <canvas id="single-canvas"></canvas>
+        <canvas id="single-canvas">Selected camera view</canvas>
       </div>
-      <div id="loading-overlay" class="hidden">
-        <div class="spinner"></div>
+      <output id="loading-overlay" class="hidden">
+        <div class="spinner" aria-hidden="true"></div>
         <div id="loading-text">Loading cameras…</div>
-      </div>
+      </output>
     </div>
 
     <div id="controls">
-      <button id="btn-prev-clip" title="Previous clip" disabled>
-        <svg viewBox="0 0 24 24" fill="currentColor">
+      <button id="btn-prev-clip" title="Previous clip" aria-label="Previous clip" disabled>
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
           <rect x="6" y="6" width="2" height="12" rx="0.5"/>
           <path d="M16 6L9 12l7 6V6z"/>
         </svg>
       </button>
-      <button id="btn-play" title="Play / Pause">
-        <svg id="icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        <svg id="icon-pause" viewBox="0 0 24 24" fill="currentColor" class="hidden"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+      <button id="btn-play" title="Play / Pause" aria-label="Play / Pause">
+        <svg id="icon-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+        <svg id="icon-pause" viewBox="0 0 24 24" fill="currentColor" class="hidden" aria-hidden="true"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
       </button>
-      <button id="btn-next-clip" title="Next clip" disabled>
-        <svg viewBox="0 0 24 24" fill="currentColor">
+      <button id="btn-next-clip" title="Next clip" aria-label="Next clip" disabled>
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
           <rect x="16" y="6" width="2" height="12" rx="0.5"/>
           <path d="M8 6l7 6-7 6V6z"/>
         </svg>
       </button>
       <div id="scrubber-wrap">
-        <input type="range" id="scrubber" min="0" max="10000" value="0" step="1">
+        <input type="range" id="scrubber" min="0" max="10000" value="0" step="1"
+               aria-label="Seek" aria-valuetext="0:00 of 0:00">
       </div>
       <span id="time-display">0:00 / 0:00</span>
-      <select id="speed-select" title="Playback speed">
+      <select id="speed-select" title="Playback speed" aria-label="Playback speed">
         <option value="0.25">0.25×</option>
         <option value="0.5">0.5×</option>
         <option value="1" selected>1×</option>
         <option value="2">2×</option>
       </select>
-      <button id="btn-unit" title="Toggle speed units">mph</button>
+      <button id="btn-unit" title="Toggle speed units" aria-label="Toggle speed unit">mph</button>
     </div>
 
     <div id="event-info" class="hidden">
@@ -135,7 +137,7 @@
       <span id="info-reason"></span>
       <span id="info-timestamp"></span>
     </div>
-  </div>
+  </main>
 </div>
 
 <!-- Third-party libraries -->

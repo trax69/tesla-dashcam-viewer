@@ -22,6 +22,8 @@ function buildQuadGrid(cams) {
 
     const canvas = document.createElement('canvas');
     canvas.id = `cam-${cam}`;
+    // Canvas fallback content — exposed to assistive tech as the alternative
+    canvas.textContent = `${cam.replaceAll('_', ' ')} camera view`;
     cell.appendChild(canvas);
 
     const label = document.createElement('div');

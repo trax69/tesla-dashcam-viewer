@@ -27,18 +27,24 @@
 #controls #btn-play svg { width: 20px; height: 20px; }
 
 #scrubber-wrap { flex: 1; padding: 0 6px; display: flex; align-items: center; }
+/* Input is 24px tall (WCAG 2.5.8 target size); the visible 4px track is
+   drawn on the track pseudo-elements. --scrub: played fraction 0–100,
+   set from JS on every time update. */
 #scrubber {
   width: 100%; -webkit-appearance: none; appearance: none;
+  height: 24px;
+  background: transparent;
+  cursor: pointer;
+}
+#scrubber::-webkit-slider-runnable-track {
   height: 4px; border-radius: 999px;
-  /* --scrub: played fraction 0–100, set from JS on every time update */
   background: linear-gradient(to right,
     var(--accent) calc(var(--scrub, 0) * 1%),
-    var(--surface-3) calc(var(--scrub, 0) * 1%));
-  cursor: pointer;
+    var(--surface-2) calc(var(--scrub, 0) * 1%));
 }
 #scrubber::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 14px; height: 14px;
+  width: 14px; height: 14px; margin-top: -5px;
   border-radius: 50%; background: #fff;
   cursor: pointer;
   transition: transform .12s, box-shadow .12s;
@@ -46,6 +52,12 @@
 #scrubber::-webkit-slider-thumb:hover {
   transform: scale(1.25);
   box-shadow: 0 0 0 5px var(--accent-soft);
+}
+#scrubber::-moz-range-track {
+  height: 4px; border-radius: 999px;
+  background: linear-gradient(to right,
+    var(--accent) calc(var(--scrub, 0) * 1%),
+    var(--surface-2) calc(var(--scrub, 0) * 1%));
 }
 #scrubber::-moz-range-thumb {
   width: 14px; height: 14px; border: none;

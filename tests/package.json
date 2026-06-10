@@ -1,0 +1,13 @@
+{
+  "name": "tesla-dashcam-viewer-a11y-tests",
+  "private": true,
+  "type": "module",
+  "description": "WCAG 2.2 AA verification: axe-core scan, contrast matrix, keyboard operability",
+  "scripts": {
+    "test": "node a11y.test.mjs"
+  },
+  "devDependencies": {
+    "axe-core": "^4.10.2",
+    "puppeteer-core": "^23.11.1"
+  }
+}

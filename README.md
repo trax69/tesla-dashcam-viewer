@@ -64,6 +64,25 @@ Then open the printed URL (e.g. `http://localhost:3000`). The **Live Server** ex
 
 ---
 
+## Accessibility
+
+The interface targets **WCAG 2.2 Level AA**:
+
+- **Contrast** — all text tokens meet 4.5:1 and non-text UI (focus rings, scrubber track/fill) meets 3:1, verified against every surface they appear on (1.4.3 / 1.4.11)
+- **Keyboard** — every control is a real `<button>` or `<input>`, fully operable by keyboard with a visible focus indicator; clips activate with `Enter`, the seek slider responds to arrow keys (2.1.1 / 2.4.7 / 2.4.11)
+- **Target size** — the scrubber and all toolbar controls have at least a 24×24 px hit area (2.5.8)
+- **Semantics for assistive tech** — landmark regions (`main` content, `complementary` sidebar), a screen-reader-only `h1`, `aria-pressed` on camera toggles, `aria-current` on the active clip, `aria-valuetext` on the scrubber (time in words), labelled HUD/video canvases, and `role="status"` live regions for loading states (1.3.1 / 4.1.2)
+
+A self-contained test suite ([tests/](tests/)) verifies all of this automatically — an [axe-core](https://github.com/dequelabs/axe-core) scan with the full WCAG 2.0/2.1/2.2 A+AA tag set on both the drop-zone and loaded-player states, a token contrast matrix, and scripted keyboard runs:
+
+```bash
+cd tests
+npm install
+npm test
+```
+
+---
+
 ## Supported Cameras
 
 | Name | Description |

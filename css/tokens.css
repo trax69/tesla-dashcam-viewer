@@ -8,7 +8,7 @@
 
   --text:          #f5f7fa;
   --text-muted:    #9aa3b0;
-  --text-dim:      #565d68;
+  --text-dim:      #87919f; /* dimmest text tier — keep ≥4.5:1 on every surface (WCAG 1.4.3) */
 
   --border:        rgba(255, 255, 255, .07);
   --border-strong: rgba(255, 255, 255, .14);

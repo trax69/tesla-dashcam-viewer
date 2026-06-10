@@ -32,6 +32,9 @@ sonar-project.properties
 .scannerwork/
 .sonarlint/
 
+# Accessibility test artifacts (screenshots from visual-check.mjs)
+tests/shot-*.png
+
 # Logs & temp files
 *.log
 *.tmp

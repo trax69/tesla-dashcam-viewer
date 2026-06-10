@@ -48,9 +48,7 @@ function loadFolder(fileList) {
   state.activeCam = 'quad';
   quadView.classList.remove('hidden');
   singleView.classList.add('hidden');
-  document.querySelectorAll('.cam-btn').forEach((btn) =>
-    btn.classList.toggle('active', btn.dataset.cam === 'quad')
-  );
+  setActiveCamButtons('quad');
 
   dropZone.classList.add('hidden');
   appEl.classList.remove('hidden');
@@ -88,9 +86,7 @@ async function loadClipAtIndex(idx) {
     quadView.classList.add('hidden');
     singleView.classList.remove('hidden');
   }
-  document.querySelectorAll('.cam-btn').forEach((btn) =>
-    btn.classList.toggle('active', btn.dataset.cam === targetCam)
-  );
+  setActiveCamButtons(targetCam);
 
   hudInst.resize();
   showLoading('Loading cameras…');
@@ -116,6 +112,15 @@ async function loadClipAtIndex(idx) {
   }
 }
 
+// Sync visual + ARIA pressed state of the camera toggle buttons
+function setActiveCamButtons(mode) {
+  document.querySelectorAll('.cam-btn').forEach((btn) => {
+    const active = btn.dataset.cam === mode;
+    btn.classList.toggle('active', active);
+    btn.setAttribute('aria-pressed', String(active));
+  });
+}
+
 // ── Camera mode ───────────────────────────────────────────────────────────────
 
 function setCameraMode(mode) {
@@ -123,9 +128,7 @@ function setCameraMode(mode) {
   state.activeCam = mode;
   player.setActiveCam(mode);
 
-  document.querySelectorAll('.cam-btn').forEach((btn) =>
-    btn.classList.toggle('active', btn.dataset.cam === mode)
-  );
+  setActiveCamButtons(mode);
 
   if (mode === 'quad') {
     quadView.classList.remove('hidden');
@@ -144,6 +147,7 @@ function setCameraMode(mode) {
 function onTimeUpdate(timeMs, durationMs) {
   timeDisplay.textContent = `${formatTime(timeMs)} / ${formatTime(durationMs)}`;
   if (durationMs > 0) scrubber.value = Math.round((timeMs / durationMs) * 10000);
+  scrubber.setAttribute('aria-valuetext', `${formatTime(timeMs)} of ${formatTime(durationMs)}`);
   updateScrubFill();
 }
 
@@ -193,6 +197,7 @@ function wireEvents() {
   scrubber.addEventListener('input', () => {
     const t = (+scrubber.value / 10000) * player.duration;
     timeDisplay.textContent = `${formatTime(t)} / ${formatTime(player.duration)}`;
+    scrubber.setAttribute('aria-valuetext', `${formatTime(t)} of ${formatTime(player.duration)}`);
     updateScrubFill();
     player.seekPreview(t);
   });
